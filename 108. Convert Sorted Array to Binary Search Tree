@@ -1,0 +1,18 @@
+这道题比较简单，但是大家要注意审题，我第一次看题目的时候，囫囵吞枣了，觉得给一个数组怎么就能恢复出来一棵树呢，后来仔细一看，
+是要恢复一课平衡二叉树，那就比较简单了，平衡二叉树因为左右两边的节点数目不会有很大差距，因此，他的根节点一定在数组的中间，
+找到了根节点的位置，左右使用递归就可以恢复出来。
+class Solution(object):
+    def sortedArrayToBST(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: TreeNode
+        """
+        length=len(nums)
+        if length==0:return None
+        if length==1:return TreeNode(nums[0])
+        mid=length//2
+        root=TreeNode(nums[mid])
+        root.left=self.sortedArrayToBST(nums[:mid])
+        root.right=self.sortedArrayToBST(nums[mid+1:])
+        return root
+    
