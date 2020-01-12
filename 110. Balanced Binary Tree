@@ -1,0 +1,18 @@
+这道题比较简单，主要是采用递归的方式解决，判断一个树是不是平衡二叉树，要两个条件满足：第一个是他的左右子树都是平衡二叉树，
+另一个是左右子树的高度差不能大于1，理清了思路，就可以开始写了，先定义一个获取一棵树高度的函数depth，depth其实就是在数层数
+代码如下
+class Solution(object):
+    def depth(self,node):
+        if node==None:return 0
+        sum=0
+        if node.left!=None:sum=max(sum,self.depth(node.left))
+        if node.right!=None:sum=max(sum,self.depth(node.right))
+        sum+=1
+        return sum
+    def isBalanced(self, root):
+        if root==None:
+            return True
+        if abs(self.depth(root.left)-self.depth(root.right))<2 and self.isBalanced(root.left) and self.isBalanced(root.right):
+            return True
+        return False
+        
