@@ -1,0 +1,32 @@
+这道题咋看起来非常难，无从下手的感觉，就算例子里面只有三个有效节点，也得想一下子。后来看了网友的题解，最简单的方法就是下面这种：
+先把这个错误的二叉搜索树中序遍历一下，输出一个数组。如果是正确的二叉搜索树的话，应该是严格按照升序排列的，把刚才的数组按照升序排序，得到第二个数组，
+这两个数组对照，发现错误的两个数，再回到原来的树上面去，匹配相应的节点，如果在这两个错误的数中，就换过来。就这样子。
+class Solution(object):
+    def returntree(self,root):#将二叉搜索树按照中序转为数组
+        if root==None:
+            return []
+        res=[]
+        if root.left!=None:
+            res+=self.returntree(root.left)
+        res.append(root.val)
+        if root.right!=None:
+            res+=self.returntree(root.right)
+        return res
+    def recover(self,root,err1,err2):#在原树中寻找放置错误的节点，并进行替换
+        if root==None :return
+        if root.val==err1:root.val=err2
+        elif root.val==err2:root.val=err1
+        if root.left!=None:self.recover(root.left,err1,err2)
+        if root.right!=None:self.recover(root.right,err1,err2)
+        return root
+    def recoverTree(self, root):#主函数出了调用前面两个函数外，还负责对两个数组进行对比，选找出错误的两个节点
+        if root==None:return
+        list1=self.returntree(root)
+        print list1
+        list2=sorted(list1)
+        print list2
+        err=[]
+        for i in range(len(list1)):
+            if list1[i]!=list2[i]:
+                err.append(list1[i])
+        self.recover(root,err[0],err[1])
