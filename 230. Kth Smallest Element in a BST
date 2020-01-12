@@ -1,0 +1,31 @@
+这道题最直观的解法就是通过中序遍历将这颗二叉搜素数变成一个有序的数组，直接寻找数组的k-1个数就行，代码如下：
+class Solution(object):
+    def inordertree(self,root):
+        if root==None:return[]
+        res=[]
+        if root.left!=None:
+            res+=self.inordertree(root.left)
+        res.append(root.val)
+        if root.right!=None:
+            res+=self.inordertree(root.right)
+        return res           
+    def kthSmallest(self, root, k):
+        temp=self.inordertree(root)
+        return temp[k-1]
+但是我看题解里面有一个非常简单又快速的解法，是使用迭代的方法解决,因为我一直对这种迭代使用压栈的方式很排斥，所以每次都绕过这种解法，
+这种做法不可取哈，我们要有一切反对派都是纸老虎的思想去看待新的解法，仔细琢磨一下，练上两遍，也就差不多了，下面这个程序我逐行解读一下，方便
+跟我一样对迭代有障碍的人理解，大佬绕过
+class Solution(object):     
+    def kthSmallest(self, root, k):
+        stack=[]   #先是定义一个空队列来压栈
+        while True:
+            while root!=None: #这个循环时关键，只要有左节点，统统压入栈内，跟咱们手工操作的思想一致
+                stack.append(root)
+                root=root.left
+            root=stack.pop() #弹出最底层的左节点，肯定是最小的哪个节点
+            k=k-1            #计数减一       
+            if k==0:         #如果计数结束了，那就返回当前节点的值
+                return root.val
+            root=root.right  #在这个地方卡了一下，觉得如果是叶子节点，应该不用访问，也不用压进去啊，其实前面已经判断过了
+            因此是不是叶子节点不重要，都可以访问其右边的树，如果是叶子节点，就直接pop其根节点出来，然后计数，如果是非叶子节点，肯定要将其右节点计算进去
+            
