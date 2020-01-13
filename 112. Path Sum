@@ -1,0 +1,13 @@
+这道题我的第一个想法是把所有的从根到叶子节点的路径的值都计算出来，看看是否有等于sum的值，如果有，return true，如果没有return false就完了，
+如果中间就发现了sum值，直接return true，后来发现这个实现方式其实比较复杂，还不如用递归的方式实现，看代码
+class Solution(object):
+    def hasPathSum(self, root, sum):
+        if not root:return False
+        if not root.left and not root.right:  #关键在于这一步，之前没想清楚，这一步是判断是否走到了叶节点，并且达到了sum和
+            if root.val==sum: return True
+            else:return False
+        if root.left:
+            if self.hasPathSum(root.left,sum-root.val):return True
+        if root.right:
+            if self.hasPathSum(root.right,sum-root.val):return True
+        return False
