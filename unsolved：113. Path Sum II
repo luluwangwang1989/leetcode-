@@ -1,0 +1,16 @@
+这道题使用回溯法来做，结果老输出两遍，不知道为什么
+class Solution(object):
+    def dfs(self,node,res,path,sum):
+        if not node and sum!=0:return
+        if node==None and sum==0:
+            res.append(path[:])
+            return
+        path.append(node.val)
+        for newnode in [node.left,node.right]:
+            self.dfs(newnode,res,path,sum-node.val)
+        path.pop()
+    def pathSum(self, root, sum):
+        res=[]
+        path=[]
+        self.dfs(root,res,path,sum)
+        return res
