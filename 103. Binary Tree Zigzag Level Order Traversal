@@ -1,0 +1,14 @@
+在写了五遍层次遍历以后，突然对层次遍历醍醐灌顶，不那么迷茫了，这道题是层次遍历的一个变型，简称Z行遍历，
+其实核心思想就是在层次遍历里面加入了对层数奇偶性的判断，通过这道题才发现，真是要多刷题啊，要不然真是一脸懵
+class Solution(object):
+    def helper(self,res,node,level):
+        if not node:return None
+        if len(res)==level:res.append([])
+        if level%2==0:res[level].append(node.val) #判断奇偶性，偶数就按顺序在后面添加，
+        if level%2==1:res[level].insert(0,node.val)#奇数需要在前面插入，就是倒序插入
+        self.helper(res,node.left,level+1)
+        self.helper(res,node.right,level+1)
+    def zigzagLevelOrder(self, root):
+        res=[]
+        self.helper(res,root,0)
+        return res
