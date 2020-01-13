@@ -1,0 +1,17 @@
+使用回溯法解决，自己的回溯还是不熟练，这道题卡了一个多小时才通过，惭愧惭愧，记得path里面要使用path[:]来复制一份变量出来
+class Solution(object):
+    def dfs(self,node,res,path,sum):
+        if not node and sum==0:return None
+        if not node and sum!=0:return
+        if not node.left and not node.right and sum==node.val:
+            res.append(path[:]+[node.val])
+            return
+        path.append(node.val)
+        for newnode in [node.left,node.right]:
+            self.dfs(newnode,res,path,sum-node.val)
+        path.pop()
+    def pathSum(self, root, sum):
+        res=[]
+        path=[]
+        self.dfs(root,res,path,sum)
+        return res
