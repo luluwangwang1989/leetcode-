@@ -1,0 +1,20 @@
+这是一道典型的动态规划问题，先看代码，这道题一定要跟最长子串区分开来，最长子串肯定是连续的，但是最长子序列不一定连续，因此
+最长子序列问题就是需要扫描比目前这个节点小的所有的数的长度，动态数组定义为，dp[i] 表示以 nums[i] 这个数结尾的最长递增子序列的长度。
+注意这个定义，动态规划的定义是非常重要的一点。
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        length=len(nums)
+        if length<2:
+            return length
+        else:
+            dp=[1]*length
+            for i in range(1,length):
+                for j in range(i):
+                    if nums[i]>nums[j]:
+                        dp[i]=max(dp[i],dp[j]+1)
+            print dp
+            return max(dp)
