@@ -1,0 +1,24 @@
+这道题有个最经典的解法，就是将给定数组，先按照第一个数进行升序排列，再按照第二个数进行倒序排列，这个问题就会转为一个经典的LIS问题
+这边贴上一个网友的详细分解：
+https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484498&amp;idx=1&amp;sn=df58ef249c457dd50ea632f7c2e6e761&source=41#wechat_redirect
+我这边使用的是DP来解决LIS，结果超时了，代码如下
+class Solution(object):
+    def lis(self,arr):
+        length=len(arr)
+        dp=[1]*length
+        for i in range(1,length):
+            for j in range(i):
+                if arr[j]<arr[i]:
+                    dp[i]=max(dp[i],dp[j]+1)
+        return max(dp)
+    def maxEnvelopes(self, envelopes):
+        length=len(envelopes)
+        if length<2:
+            return length
+        #temp=sorted(envelopes, key=lambda x:(x[0], -x[1]))
+        envelopes.sort(key=lambda x:(x[0], -x[1]))
+        for i in range(length):
+            envelopes[i]=envelopes[i][1]
+        print envelopes
+        return self.lis(envelopes)
+网友提醒这道题应该用二分法来解决LIS，但是我太笨了，一直不能理解二分法来解决LIS的思路，有时间补充一下
