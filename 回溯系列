@@ -1,0 +1,93 @@
+回溯一直是绕不开的一个坎，就是反复的看了忘，忘了看，也不知道这个过程要持续多久，现在写起来回溯还是觉得很困难，再刷一遍吧
+，要不然还能咋样呢。。。
+78. Subsets
+解法1：神了，这个解法真是神了，不表态
+class Solution(object):
+    def subsets(self, nums):
+        output=[[]]
+        length=len(nums)
+        for x in nums:
+            output=output+[[x] +s for s in output ]
+        return output
+解法2：典型的回溯
+这道题告诉我们整数数组 nums 不包含重复元素。因此作图，画出递归树结构是关键。
+
+因为是组合问题，所以我们按顺序读字符，就不需要设置 used 数组；
+经过分析，我们知道，在根结点、非叶子结点和叶子结点都需要结算，因此 res.apppend(path[:]) 就要放在“中间”位置。
+
+class Solution(object):
+    def dfs(self,nums,start,path,res):
+        res.append(path[:])
+        for i in range(start,len(nums)):
+            path.append(nums[i])
+            self.dfs(nums,i+1,path,res)
+            path.pop()
+        return res
+    def subsets(self, nums):
+        if not nums:
+            return []
+        path=[]
+        res=[]
+        self.dfs(nums,0,path,res)
+        return res
+ 这里有个点要澄清一下：
+ 1、在“参考代码 1”中 path 是相当于一个全局变量，全程在递归方法中传递，全局只有 1 个。这个 path 变量表示 DFS 代码执行到某个结点时刻的状态变量。由于每一个结点都是结果集 res 中的一个结果，因此需要把当前状态 path 做一个拷贝，将拷贝的结果保存在结果集变量 res 中。
+
+具体原因就是，每一次保存的只是 path 变量的一个引用（是地址，而不是真正的 path 变量）。
+
+相信您已经尝试过把 [:] 去掉，由于 DFS 最终会回到原点，最终 path 变量会为空，因此最终 res 变量会得到一系列 [[], [], [], [], [], [], [], []]。
+
+2、在 Python 中有一种特殊的语法，像 [1, 2, 3] + [4] 这样写，会生成一个新的对象 [1, 2, 3, 4]。
+
+如果把 path.append(nums[i]) 换成 path + [i] 并且将这个结果直接作为变量传递到递归方法的下一层。
+
+等价于每一次递归都生成一个新的状态变量，此时，记录结果集的时候不用拷贝。请比较一下下面这种写法与“参考代码 1”的区别。
+
+Python 代码：
+
+from typing import List
+
+
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        size = len(nums)
+        if size == 0:
+            return []
+
+        res = []
+        self.__dfs(nums, 0, [], res)
+        return res
+
+    def __dfs(self, nums, start, path, res):
+        # 区别 1：path 变量不用产生一个副本添加到结果集中国
+        res.append(path)
+        for i in range(start, len(nums)):
+            # 区别 2：每一次状态都是新生成的，因此不用状态重置，即在递归结束以后无需 path.pop()
+            self.__dfs(nums, i + 1, path + [nums[i]], res)
+简单总结一下：
+
+1、如果每一次尝试搜索结果，都使用生成新的变量，用 res.append(path)，不用状态重置，因为每一次的状态都是新的。
+
+2、如果全程使用一个变量去尝试得到一个符合的结果，用 res.append(path[:])，并且在一种尝试结束的时候，都需要状态重置（恢复现场），因为只有在状态相同的情况下，才可以做不同的尝试。
+90. Subsets II
+class Solution(object):
+    def dfs(self,nums,start,path,res):
+        res.append(path[:])
+        for i in range(start,len(nums)):
+            if i>start and nums[i]==nums[i-1]:
+                continue
+            path.append(nums[i])     #注意这句话要写在判断是否重复之后，我之前写在了前面，就不对了
+            self.dfs(nums,i+1,path,res)
+            path.pop()
+        return res
+    def subsetsWithDup(self, nums):
+        if not nums:
+            return []
+        length=len(nums)
+        nums.sort()
+        path=[]
+        res=[]
+        self.dfs(nums,0,path,res)
+        return res
+        
+ 
