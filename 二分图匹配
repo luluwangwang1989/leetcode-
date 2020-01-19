@@ -1,0 +1,10 @@
+先看题：
+given a word of length n and n six-sided dice with a character in each side. find out if this word can ben constrcted by the set of given dice
+
+input:
+word="hello"
+dice=[[a,l,c,d,e,f],[a,b,c,d,e,f],[a,b,c,h,e,f],[a,b,c,d,o,f],[a,b,c,l,e,f]]
+output=true
+explanation:dice[2][3]+dice[1][4]+dice[0][1]+dice[4][3]+dice[3][4]
+这道题第一眼看到的时候，能想到的解法就是回溯输出所有的排列组合，然后筛选，也是一个办法，就是笨重而已
+后来网友告诉我这是个典型的二分图匹配，原谅我第一次听说这个。。。所以就学习了一下
