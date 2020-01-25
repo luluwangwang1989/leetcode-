@@ -1,0 +1,27 @@
+这道题卡了很久，因为不知道bfs要借助一个队列实现。。。真是被自己贫瘠的知识震惊了，直接上代码看看
+from collections import deque #先载入deque包，deque是前后都可以操作的一个队列
+class Solution(object):
+    def orangesRotting(self, grid):
+        r=len(grid)
+        if r==0:return 0
+        l=len(grid[0])
+        q=deque()
+        fresh=0
+        time=0
+        dirs=[[-1,0],[0,-1],[0,1],[1,0]]
+        for i in range(r):
+            for j in range(l):
+                if grid[i][j]==1:fresh+=1
+                elif grid[i][j]==2:q.append([i,j,0])  #注意，把每次的层数当作参数传递进去，
+        if fresh==0: return 0
+        while fresh and q:
+            x,y,time=q.popleft()
+            for dire in dirs:
+                newx=x+dire[0]
+                newy=y+dire[1]
+                if 0<=newx and 0<=newy and newx<r and newy<l and grid[newx][newy]==1:
+                    fresh=fresh-1
+                    q.append([newx,newy,time+1])
+                    grid[newx][newy]=2
+        if fresh==0:return time+1 #此处要注意time在下次调用q.append时才会更新值，因此返回结果要多加一次。
+        else: return -1
